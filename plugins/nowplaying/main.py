@@ -1,13 +1,9 @@
-"""nowplaying — minimal flow plugin example.
-
-Polls the current track every 2 s and prints it. Demonstrates flow_api usage.
-"""
 import sys
 import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-import flow_api  # noqa: E402  — bundled by `flow install`
+import flow_api
 
 
 def main():
