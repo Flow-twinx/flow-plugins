@@ -1,0 +1,23 @@
+{
+  "api_version": 1,
+  "plugins": [
+    {
+      "name": "thumbnail-circle",
+      "version": "0.1.0",
+      "type": "python",
+      "entry": "main.py",
+      "gui": true,
+      "deps": ["pyside6"],
+      "description": "Floating circular window showing the current track's artwork"
+    },
+    {
+      "name": "nowplaying",
+      "version": "0.1.0",
+      "type": "python",
+      "entry": "main.py",
+      "gui": false,
+      "deps": [],
+      "description": "Polls and prints the current track via the flow plugin API"
+    }
+  ]
+}
