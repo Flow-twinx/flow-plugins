@@ -1,21 +1,15 @@
-"""
-thumbnail-circle — A small floating circular window that displays the artwork
-of the currently playing track.
-
-Requires PySide6:  pip install pyside6
-"""
 import hashlib
 import sys
 import time
 import urllib.request
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QTimer, QPoint
+from PySide6.QtCore import QPoint, Qt, QTimer
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPixmap
 from PySide6.QtWidgets import QApplication, QWidget
 
 sys.path.insert(0, str(Path(__file__).parent))
-import flow_api  # noqa: E402  — bundled by `flow install`
+import flow_api
 
 CACHE_DIR = Path(__file__).parent / ".thumb_cache"
 WIDGET_SIZE = 120
@@ -39,10 +33,6 @@ class CircularThumbnail(QWidget):
         self._last_title = ""
         self._placeholder = self._make_placeholder()
 
-    # ------------------------------------------------------------------ #
-    # Painting                                                            #
-    # ------------------------------------------------------------------ #
-
     def _make_placeholder(self) -> QPixmap:
         pm = QPixmap(WIDGET_SIZE, WIDGET_SIZE)
         pm.fill(Qt.GlobalColor.transparent)
@@ -62,7 +52,6 @@ class CircularThumbnail(QWidget):
 
         pm = self._pixmap if self._pixmap else self._placeholder
 
-        # Circular clip
         clip = QPainterPath()
         clip.addEllipse(2, 2, WIDGET_SIZE - 4, WIDGET_SIZE - 4)
         painter.setClipPath(clip)
@@ -71,16 +60,11 @@ class CircularThumbnail(QWidget):
         y = (WIDGET_SIZE - pm.height()) // 2
         painter.drawPixmap(x, y, pm)
 
-        # Thin border
         painter.setClipping(False)
         painter.setPen(QColor(60, 60, 70, 180))
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.drawEllipse(2, 2, WIDGET_SIZE - 4, WIDGET_SIZE - 4)
         painter.end()
-
-    # ------------------------------------------------------------------ #
-    # Drag / close                                                        #
-    # ------------------------------------------------------------------ #
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -94,10 +78,6 @@ class CircularThumbnail(QWidget):
 
     def mouseReleaseEvent(self, _event):
         self._drag_pos = None
-
-    # ------------------------------------------------------------------ #
-    # Thumbnail loading                                                   #
-    # ------------------------------------------------------------------ #
 
     def _load_thumb(self, source: str):
         CACHE_DIR.mkdir(exist_ok=True)
@@ -123,10 +103,6 @@ class CircularThumbnail(QWidget):
             Qt.TransformationMode.SmoothTransformation,
         )
         self.update()
-
-    # ------------------------------------------------------------------ #
-    # Poll                                                                #
-    # ------------------------------------------------------------------ #
 
     def poll(self):
         track = flow_api.current_track()

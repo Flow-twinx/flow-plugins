@@ -31,11 +31,19 @@ flow uninstall <plugin-name>
 
 | Name | Version | Description |
 |------|---------|-------------|
-| thumbnail-circle | 0.1.0 | Floating circular window showing the current track's artwork |
-| nowplaying | 0.1.0 | Polls and prints the current track via the flow plugin API |
+| Gui-player | 0.1.0 | Floating circular window showing the current track's artwork |
+| nowplaying | 0.2.0 | Polls the flow daemon and prints the current track and live players |
+
+Plugins use the injected `flow_api.py` (API v3) — Flow copies the matching
+client from `backend/plugin_api/flow_api.py` at install time, so the plugin
+always talks the same protocol version as the host.
 
 ## Adding a plugin
 
 1. Add a `plugins/<name>/` directory with a `main.py` entry point.
-2. Add a catalog entry in `manifest.json`.
-3. Use the bundled `flow_api` module to interact with Flow (it is injected at install time).
+2. Add a catalog entry in `manifest.json` (the directory name must match the
+   entry's `name`, and `api_version` must be `3`).
+3. Use the bundled `flow_api` module to interact with Flow (injected at install
+   time).
+4. `raw: false` by default — only set `"raw": true` for plugins that legitimately
+   need the gated `raw_cli()` escape hatch (host decides at install).
