@@ -47,3 +47,7 @@ always talks the same protocol version as the host.
    time).
 4. `raw: false` by default — only set `"raw": true` for plugins that legitimately
    need the gated `raw_cli()` escape hatch (host decides at install).
+5. `bg` decides how `flow run` launches the plugin: `true` backgrounds it
+   (default, stop with `flow plugin kill <name>`), `false` runs it in the
+   foreground (Ctrl-C stops it) — use `"bg": false` for console plugins like
+   `nowplaying` that need the terminal.

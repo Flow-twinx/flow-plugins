@@ -9,6 +9,7 @@
       "gui": true,
       "deps": ["pyside6"],
       "raw": false,
+      "bg": true,
       "description": "Floating circular window showing the current track's artwork"
     },
     {
@@ -19,6 +20,7 @@
       "gui": false,
       "deps": [],
       "raw": false,
+      "bg": false,
       "description": "Polls the flow daemon and prints the current track and live players (API v3 sample)"
     }
   ]
