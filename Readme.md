@@ -31,12 +31,24 @@ flow uninstall <plugin-name>
 
 | Name | Version | Description |
 |------|---------|-------------|
-| Gui-player | 0.1.0 | Floating circular window showing the current track's artwork |
-| nowplaying | 0.2.0 | Polls the flow daemon and prints the current track and live players |
+| auto-stop | 0.1.0 | Pauses Flow when another MPRIS player (Zen, Firefox, …) starts playing |
 
-Plugins use the injected `flow_api.py` (API v3) — Flow copies the matching
-client from `backend/plugin_api/flow_api.py` at install time, so the plugin
-always talks the same protocol version as the host.
+### auto-stop
+
+Stops the music when someone else takes over: watches `playerctl -l` and pauses
+Flow whenever Zen, a browser, or any other MPRIS player reports `Playing`.
+
+```bash
+flow install auto-stop
+flow run auto-stop                       # backgrounds it
+flow run auto-stop --ignore spotify -v   # args pass through
+flow plugin kill auto-stop
+```
+
+Needs `playerctl` on `PATH`. Background runs log to
+`~/.flow/plugins/_logs/auto-stop.log`. Full docs, including how to tune
+the poll interval and why it reads Flow's state over MPRIS, are in
+[`plugins/auto-stop/README.md`](plugins/auto-stop/README.md).
 
 ## Adding a plugin
 
@@ -45,9 +57,9 @@ always talks the same protocol version as the host.
    entry's `name`, and `api_version` must be `3`).
 3. Use the bundled `flow_api` module to interact with Flow (injected at install
    time).
-4. `raw: false` by default — only set `"raw": true` for plugins that legitimately
-   need the gated `raw_cli()` escape hatch (host decides at install).
-5. `bg` decides how `flow run` launches the plugin: `true` backgrounds it
+4. `bg` decides how `flow run` launches the plugin: `true` backgrounds it
    (default, stop with `flow plugin kill <name>`), `false` runs it in the
    foreground (Ctrl-C stops it) — use `"bg": false` for console plugins like
    `nowplaying` that need the terminal.
+
+## See docs at the official repo for ref.
